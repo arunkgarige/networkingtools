@@ -1,3 +1,3 @@
 # NetWorking Tools
 
-# Displays Clock at the Footer with Time Zone and with Reset
+1. Displays Clock at the Footer with Time Zone and with Reset
