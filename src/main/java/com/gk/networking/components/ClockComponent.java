@@ -1,40 +1,45 @@
 package com.gk.networking.components;
 
+import com.gk.networking.utils.AppConstants;
+import com.gk.networking.utils.ExecutorsUtil;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.util.TimeZone;
-import java.util.concurrent.ExecutorService;
 
-public class ClockComponent extends JPanel implements ActionListener {
+public final class ClockComponent extends JPanel implements ActionListener {
     JLabel dateTime = new JLabel();
     JComboBox timeZoneList = new JComboBox(TimeZone.getAvailableIDs());
 
-
-    public ClockComponent(ExecutorService executorService){
-        super(new BorderLayout());
-        //setPreferredSize(new Dimension(200,80));
-        setOpaque(true);
-
-        dateTime.setPreferredSize(new Dimension(200,80));
-
+    public ClockComponent(){
+        setLayout(new FlowLayout());
+        dateTime.setPreferredSize(new Dimension(250,30));
         timeZoneList.setSelectedItem(TimeZone.getDefault().getID());
         timeZoneList.addActionListener(this);
-
-        add(dateTime, BorderLayout.PAGE_START);
-        add(timeZoneList,BorderLayout.AFTER_LAST_LINE);
-        setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
-
-        executorService.execute(new Clock());
+        dateTime.setFont(new Font(Font.DIALOG,Font.ROMAN_BASELINE,15));
+        JButton reset = new JButton(AppConstants.RESET_BUTTON);
+        reset.addActionListener(this);
+        add(reset);
+        add(timeZoneList);
+        add(dateTime);
+        setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
+        ExecutorsUtil.getExecutorsUtil().fireAndForget(new Clock());
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JComboBox jComboBox = (JComboBox) e.getSource();
-        String timeZoneSelected = (String)jComboBox.getSelectedItem();
-        System.out.println(timeZoneSelected);
+        if(e.getSource() instanceof JButton){
+            resetToDefault();
+        }
+    }
+
+    private void resetToDefault(){
+        timeZoneList.setSelectedItem(TimeZone.getDefault().getID());
+        dateTime.setText(LocalDateTime.now(TimeZone.getDefault().toZoneId()).toString());
+        repaint();
     }
 
     private void updateDateTime(){
