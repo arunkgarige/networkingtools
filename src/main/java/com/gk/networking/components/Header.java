@@ -3,7 +3,6 @@ package com.gk.networking.components;
 import javax.swing.*;
 import java.awt.*;
 
-//Menu
 public class Header extends JPanel {
     private Dimension dimension;
     JMenuBar jMenuBar = new JMenuBar();
@@ -11,9 +10,20 @@ public class Header extends JPanel {
         this.dimension = dimension;
         setSize(dimension.width, dimension.height /20);
 
-        setLayout(new FlowLayout());
-        jMenuBar.add(new JMenu("File"));
-        add(jMenuBar,FlowLayout.LEFT);
+        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+
+
+        JMenu fileMenu = new JMenu("File");
+        JMenu toolsMenu = new JMenu("Tools");
+        JMenu aboutMenu = new JMenu("About");
+
+        jMenuBar.add(fileMenu);
+        jMenuBar.add(toolsMenu);
+        jMenuBar.add(aboutMenu);
+        jMenuBar.setBorderPainted(true);
+        //jMenuBar.setHelpMenu(aboutMenu);
+        add(jMenuBar);
     }
 
 }

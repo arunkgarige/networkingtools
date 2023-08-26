@@ -19,7 +19,6 @@ public final class ClockComponent extends JPanel implements ActionListener {
         dateTime.setPreferredSize(new Dimension(250,30));
         timeZoneList.setSelectedItem(TimeZone.getDefault().getID());
         timeZoneList.addActionListener(this);
-        dateTime.setFont(new Font(Font.DIALOG,Font.ROMAN_BASELINE,15));
         JButton reset = new JButton(AppConstants.RESET_BUTTON);
         reset.addActionListener(this);
         add(reset);

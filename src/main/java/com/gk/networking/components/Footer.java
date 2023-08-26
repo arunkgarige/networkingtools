@@ -13,5 +13,4 @@ public class Footer extends JPanel {
         add(new ClockComponent());
         setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
     }
-
 }

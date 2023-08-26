@@ -1,17 +1,22 @@
 package com.gk.networking;
 
-import com.gk.networking.components.ClockComponent;
 import com.gk.networking.components.Content;
 import com.gk.networking.components.Footer;
-import com.gk.networking.components.Header;
 import com.gk.networking.utils.AppConstants;
 
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.sql.SQLOutput;
 
-public final class NetWorkingTools extends JFrame{
+public final class NetWorkingTools extends JFrame implements ActionListener {
 
     private Dimension dimension;
+    private JMenuBar jMenuBar = new JMenuBar();
 
     NetWorkingTools(String title, Dimension dimension){
         super(title);
@@ -27,17 +32,44 @@ public final class NetWorkingTools extends JFrame{
      * event-dispatching thread.
      */
     void createAndShowGUI() {
-        JPanel headerPane = new Header(dimension);
-        JPanel contentPane = new Content(dimension);
-        JPanel footerPane = new Footer(dimension);
         setLayout(new BorderLayout());
 
-        getContentPane().add(headerPane, BorderLayout.PAGE_START);
-        getContentPane().add(contentPane, BorderLayout.CENTER);
-        getContentPane().add(footerPane, BorderLayout.PAGE_END);
+        jMenuBar.addNotify();
+
+        jMenuBar.add(createFileJMenu());
+        jMenuBar.add(createToolsJMenu());
+        jMenuBar.add(createAboutJMenu());
+
+        //add(new Header(dimension), BorderLayout.PAGE_START);
+        add(new Content(dimension), BorderLayout.CENTER);
+        add(new Footer(dimension), BorderLayout.PAGE_END);
+
+        setJMenuBar(jMenuBar);
+
         //Display the window.
         pack();
         setVisible(true);
+    }
+
+    private JMenu createFileJMenu() {
+        JMenu fileMenu = new JMenu("Options");
+        fileMenu.setMnemonic(KeyEvent.VK_O);
+        JMenuItem quit = new JMenuItem(AppConstants.MENU_QUIT, KeyEvent.VK_Q);
+        quit.addActionListener(this);
+        fileMenu.add(quit);
+        return fileMenu;
+    }
+
+    private JMenu createToolsJMenu() {
+        JMenu tools = new JMenu("Tools");
+        tools.setMnemonic(KeyEvent.VK_T);
+        return tools;
+    }
+
+    private JMenu createAboutJMenu() {
+        JMenu about = new JMenu("About");
+        about.setMnemonic(KeyEvent.VK_A);
+        return about;
     }
 
     public static void main(String[] args) {
@@ -51,5 +83,17 @@ public final class NetWorkingTools extends JFrame{
         });
     }
 
+    private void processMenuItem(JMenuItem menuItem) {
+        System.out.println(menuItem.getText());
+        if(AppConstants.MENU_QUIT.equals(menuItem.getText())){
+            System.exit(0);
+        }
+    }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() instanceof JMenuItem){
+            processMenuItem((JMenuItem) e.getSource());
+        }
+    }
 }
