@@ -3,20 +3,18 @@ package com.gk.networking;
 import com.gk.networking.components.Content;
 import com.gk.networking.components.Footer;
 import com.gk.networking.utils.AppConstants;
+import com.gk.networking.utils.ExecutorsUtil;
 
 import javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.sql.SQLOutput;
+import java.awt.event.WindowEvent;
 
 public final class NetWorkingTools extends JFrame implements ActionListener {
-
-    private Dimension dimension;
-    private JMenuBar jMenuBar = new JMenuBar();
+    private final Dimension dimension;
+    private static JProgressBar jProgressBar = new JProgressBar();
 
     NetWorkingTools(String title, Dimension dimension){
         super(title);
@@ -24,6 +22,11 @@ public final class NetWorkingTools extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocation(dimension.width/2,dimension.height/2);
+        setBackground(Color.WHITE);
+        jProgressBar.setMinimum(0);
+        jProgressBar.setMaximum(10);
+        jProgressBar.setValue(0);
+        jProgressBar.setStringPainted(true);
     }
 
     /**
@@ -33,25 +36,26 @@ public final class NetWorkingTools extends JFrame implements ActionListener {
      */
     void createAndShowGUI() {
         setLayout(new BorderLayout());
+        setJMenuBar(createMenuBar());
 
-        jMenuBar.addNotify();
-
-        jMenuBar.add(createFileJMenu());
-        jMenuBar.add(createToolsJMenu());
-        jMenuBar.add(createAboutJMenu());
-
-        //add(new Header(dimension), BorderLayout.PAGE_START);
         add(new Content(dimension), BorderLayout.CENTER);
-        add(new Footer(dimension), BorderLayout.PAGE_END);
+        add(new Footer(dimension, jProgressBar), BorderLayout.PAGE_END);
 
-        setJMenuBar(jMenuBar);
-
-        //Display the window.
         pack();
         setVisible(true);
     }
 
-    private JMenu createFileJMenu() {
+    private JMenuBar createMenuBar(){
+        JMenuBar jMenuBar = new JMenuBar();
+        jMenuBar.addNotify();
+        jMenuBar.add(createOptionsJMenu());
+        jMenuBar.add(createToolsJMenu());
+        jMenuBar.add(createAboutJMenu());
+        return jMenuBar;
+    }
+
+
+    private JMenu createOptionsJMenu() {
         JMenu fileMenu = new JMenu("Options");
         fileMenu.setMnemonic(KeyEvent.VK_O);
         JMenuItem quit = new JMenuItem(AppConstants.MENU_QUIT, KeyEvent.VK_Q);
@@ -86,7 +90,8 @@ public final class NetWorkingTools extends JFrame implements ActionListener {
     private void processMenuItem(JMenuItem menuItem) {
         System.out.println(menuItem.getText());
         if(AppConstants.MENU_QUIT.equals(menuItem.getText())){
-            System.exit(0);
+            ExecutorsUtil.getExecutorsUtil().shutDown();
+            dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
     }
 

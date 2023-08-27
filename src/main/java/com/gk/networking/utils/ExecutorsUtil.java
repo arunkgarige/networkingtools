@@ -34,4 +34,8 @@ public class ExecutorsUtil {
     public Future captureResponse(Callable task){
         return this.executorService.submit(task);
     }
+
+    public void shutDown() {
+        this.executorService.shutdownNow();
+    }
 }

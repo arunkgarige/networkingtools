@@ -6,10 +6,11 @@ import java.awt.*;
 public class Footer extends JPanel {
 
     private Dimension dimension;
-    public Footer(Dimension dimension) {
+    public Footer(Dimension dimension, JProgressBar jProgressBar) {
         this.dimension = dimension;
         setSize(dimension.width, dimension.height /20);
         setLayout(new FlowLayout(FlowLayout.RIGHT));
+        add(jProgressBar);
         add(new ClockComponent());
         setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
     }
