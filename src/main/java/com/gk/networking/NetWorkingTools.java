@@ -14,7 +14,7 @@ import java.awt.event.WindowEvent;
 
 public final class NetWorkingTools extends JFrame implements ActionListener {
     private final Dimension dimension;
-    private static JProgressBar jProgressBar = new JProgressBar();
+    private static final JProgressBar jProgressBar = new JProgressBar();
 
     NetWorkingTools(String title, Dimension dimension){
         super(title);
@@ -56,8 +56,8 @@ public final class NetWorkingTools extends JFrame implements ActionListener {
 
 
     private JMenu createOptionsJMenu() {
-        JMenu fileMenu = new JMenu("Options");
-        fileMenu.setMnemonic(KeyEvent.VK_O);
+        JMenu fileMenu = new JMenu(AppConstants.MENU_FILE);
+        fileMenu.setMnemonic(KeyEvent.VK_F);
         JMenuItem quit = new JMenuItem(AppConstants.MENU_QUIT, KeyEvent.VK_Q);
         quit.addActionListener(this);
         fileMenu.add(quit);
@@ -65,13 +65,16 @@ public final class NetWorkingTools extends JFrame implements ActionListener {
     }
 
     private JMenu createToolsJMenu() {
-        JMenu tools = new JMenu("Tools");
+        JMenu tools = new JMenu(AppConstants.MENU_TOOLS);
         tools.setMnemonic(KeyEvent.VK_T);
         return tools;
     }
 
     private JMenu createAboutJMenu() {
-        JMenu about = new JMenu("About");
+        JMenu about = new JMenu(AppConstants.MENU_ABOUT);
+        JMenuItem systemInfo = new JMenuItem(AppConstants.MENU_SYSINFO);
+        systemInfo.addActionListener(this);
+        about.add(systemInfo);
         about.setMnemonic(KeyEvent.VK_A);
         return about;
     }
@@ -79,6 +82,7 @@ public final class NetWorkingTools extends JFrame implements ActionListener {
     public static void main(String[] args) {
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
+        //9452387895
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension dimension = toolkit.getScreenSize();
         javax.swing.SwingUtilities.invokeLater(() -> {
@@ -88,10 +92,14 @@ public final class NetWorkingTools extends JFrame implements ActionListener {
     }
 
     private void processMenuItem(JMenuItem menuItem) {
-        System.out.println(menuItem.getText());
-        if(AppConstants.MENU_QUIT.equals(menuItem.getText())){
-            ExecutorsUtil.getExecutorsUtil().shutDown();
-            dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        switch (menuItem.getText()){
+            case AppConstants.MENU_QUIT:
+                ExecutorsUtil.getExecutorsUtil().shutDown();
+                dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+                break;
+            case AppConstants.MENU_SYSINFO:
+
+                break;
         }
     }
 
